@@ -21,7 +21,7 @@
 %----------------------------------------------------------------------------------------
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{simart}[2020/11/10 Simart Class v1.0]
+\ProvidesClass{gks}[2020/11/10 Simart Class v1.0]
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}} % Pass through any options to the base class
 \ProcessOptions\relax % Process given options
@@ -36,7 +36,7 @@
 \usepackage{polyglossia} %LuaLatex Compiler Engine
 \setmainlanguage[variant=indonesian]{malay}
 \setotherlanguages{english}
-\PolyglossiaSetup{malay}{indentfirst=true}
+% \PolyglossiaSetup{malay}{indentfirst=false}
 
 % Rename caption's command for bahasai
 \addto\captionsmalay{
@@ -70,6 +70,9 @@
 
 %\setkeys{Gin}{draft} %Render image for draft
 
+% box
+\usepackage[most]{tcolorbox}
+
 %----------------------------------------------------------------------------------------
 % PREAMBLE OF TABLE AND LIST
 
@@ -83,13 +86,17 @@
 %\renewcommand\theadgape{\Gape[4pt]}
 %\renewcommand\cellgape{\Gape[4pt]}
 
+
 \usepackage{paralist} %Inline list(inparaenum), always on top of enumitem
 %\usepackage{longtable} % Enable table cross multiple page
 %\usepackage{array} %Mostly formatting columns and spacing
 \usepackage{enumitem} % Required for list customisation
+\usepackage{pifont} %square bullet
 
 \setlist{noitemsep} % No spacing between list items
-\setlist[itemize]{label=\textbullet, nosep, topsep=0pt, partopsep=0pt, parsep=0pt} % No spacing between itemize
+\setlist[itemize]{nosep, topsep=0pt, partopsep=0pt, parsep=0pt} % No spacing between itemize
+
+% \renewcommand{\labelitemi}{\scriptsize$\blacksquare$}
 
 % Remove spacing between itemize env. inside table env., first column type for enumerate(e), second coulmn type for itemize(i)
 %\makeatletter
@@ -109,6 +116,8 @@
 %    p{#1}%
 %    <{\@finalstrut\@arstrutbox\enditemize\endminipage}}
 %\makeatother
+
+\newcolumntype{N}{>{\raggedleft\arraybackslash}b{.5\textwidth}}
 
 %----------------------------------------------------------------------------------------
 % PREAMBLE OF BIBLIOGRAPHY
@@ -134,15 +143,25 @@
 
 \usepackage{lipsum} % Add  dummy text
 \usepackage[hidelinks]{hyperref}
-\usepackage{setspace} %Alter spacing in paragraph
-\onehalfspacing %Specify spacing of setspace
+% \usepackage{setspace} %Alter spacing in paragraph
+% \onehalfspacing %Specify spacing of setspace
 
 %\setlength{\parindent}{35pt} %Alter indentation
+% no indent
+\let\SavedIndent\indent
+\protected\def\indent{%
+	\begingroup
+	\parindent=\the\parindent
+	\SavedIndent
+	\endgroup
+}
+\setlength{\parindent}{0pt}
 
 %\usepackage{indentfirst} %Indent the first paragraph
 %\providecommand{\keywords}[1]{\textbf{\textit{Keywords---}} #1} %Insert Keyword Command
 
 %\usepackage[bahasai,showdow, calc]{datetime2} %Formating date or DTMtoday command, files ldf needs customization.
+\usepackage[datesep=-]{datetime2}
 %----------------------------------------------------------------------------------------
 % PRINT CODE IN LATEX DOCUMENT
 \usepackage{listings}
@@ -182,10 +201,10 @@
 
 \geometry{
 	paper=a4paper, % Paper size, change to letterpaper for US letter size
-	top=2.5cm, % Top margin
-	bottom=3cm, % Bottom margin
-	left=4cm, % Left margin
-	right=4cm, % Right margin
+	top=1.27cm, % Top margin
+	bottom=1.27cm, % Bottom margin
+	left=1.27cm, % Left margin
+	right=1.27cm, % Right margin
 	headheight=0.75cm, % Header height
 	footskip=1.5cm, % Space from the bottom margin to the baseline of the footer
 	headsep=0.75cm, % Space from the top margin to the baseline of the header
@@ -198,7 +217,7 @@
 %----------------------------------------------------------------------------------------
 % LUALATEX FONT
 \usepackage{fontspec}
-%\setmainfont{Arial} %Altex main font documents, default= Modern
+\setmainfont{Times New Roman} %Altex main font documents, default= Modern
 
 % PdfLATEX FONT
 %\usepackage[utf8]{inputenc} % Required for inputting international characters
@@ -206,7 +225,7 @@
 
 %\usepackage[protrusion=true, expansion=true]{microtype} % Better typography
 
-%\linespread{1.05} % Increase line spacing slightly; Palatino benefits from a slight increase by default
+\linespread{1.05} % Increase line spacing slightly; Palatino benefits from a slight increase by default
 
 %----------------------------------------------------------------------------------------
 %	TITLE SECTION
@@ -221,8 +240,8 @@
 
 \titleformat{\section} %command
 [display]%shape
-{\normalfont\fontsize{11}{15}\filcenter\bfseries}%format
-{BAB \thesection}%label
+{\normalfont\fontsize{20}{22}\filcenter\bfseries}%format
+{}%label
 {0pt}%sep
 {\vspace{-4pt}}%before-title
 []%after-title
@@ -296,6 +315,20 @@
 \lfoot{} % Left footer
 \cfoot{\thepage} % Centre footer
 \rfoot{} % Right footer
+
+
+% dashed box
+\usepackage{environ}
+\usepackage{tikz}
+
+\NewEnviron{elaboration}{
+	% \par
+	\begin{tikzpicture}
+		\node[rectangle,minimum width=0.98\textwidth] (m) {\begin{minipage}{0.98\textwidth}\BODY\end{minipage}};
+		\draw[dashed] (m.south west) rectangle (m.north east);
+	\end{tikzpicture}
+}
+
 
 %----------------------------------------------------------------------------------------
 %       MAKE4HT/HELPERS4HT
