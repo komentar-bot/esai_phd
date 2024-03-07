@@ -198,7 +198,11 @@
 %----------------------------------------------------------------------------------------
 % LUALATEX FONT
 \usepackage{fontspec}
-%\setmainfont{Arial} %Altex main font documents, default= Modern
+% \setmainfont{Arial} %Altex main font documents, default= Modern
+\setmainfont[%
+	ItalicFont=Poppins-Italic.ttf,%
+	BoldFont=Poppins-Bold.ttf,%
+	SmallCapsFeatures={Numbers=OldStyle}]{Poppins-Regular.ttf}
 
 % PdfLATEX FONT
 %\usepackage[utf8]{inputenc} % Required for inputting international characters
